@@ -5,9 +5,15 @@
 </head>
 <body>
     <h1>Book List</h1>
+    <form method="get" action="{% url 'book_list' %}">
+        <input type="text" name="q" placeholder="Search for books..." value="{{ query }}">
+        <button type="submit">Search</button>
+    </form>
     <ul>
         {% for book in books %}
-            <li><a href="{% url 'book_detail' pk=book.pk %}">{{ book.title }}</a> by {{ book.author }}</li>
+            <li>
+                <a href="{% url 'book_detail' book.pk %}">{{ book.title }}</a> by {{ book.author }} - ${{ book.price }}
+            </li>
         {% endfor %}
     </ul>
 </body>

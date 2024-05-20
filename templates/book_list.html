@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Book List</title>
-</head>
-<body>
-    <h1>Book List</h1>
+
+{% extends 'base.html' %}
+
+{% block title %}Book List{% endblock %}
+
+{% block content %}
+    <h2>Book List</h2>
     <form method="get" action="{% url 'book_list' %}">
         <input type="text" name="q" placeholder="Search for books..." value="{{ query }}">
         <button type="submit">Search</button>
@@ -12,9 +12,17 @@
     <ul>
         {% for book in books %}
             <li>
-                <a href="{% url 'book_detail' book.pk %}">{{ book.title }}</a> by {{ book.author }} - ${{ book.price }}
+                <a href="{% url 'book_detail' book.pk %}">{{ book.title }}</a>
+                by {{ book.author }} - ${{ book.price }}
+                {% if book.cover_image %}
+                    <img src="{{ book.cover_image.url }}" alt="Book Cover" style="max-width: 100px;">
+                {% endif %}
+                <form action="{% url 'add_to_cart' book.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="number" name="quantity" value="1" min="1">
+                    <button type="submit">Add to Cart</button>
+                </form>
             </li>
         {% endfor %}
     </ul>
-</body>
-</html>
+{% endblock %}
